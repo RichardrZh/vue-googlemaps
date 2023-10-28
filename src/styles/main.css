@@ -1,0 +1,15 @@
+@import './base.css';
+
+/* Global CSS Vars */
+
+#app {
+  background-color: lightgray;
+}
+
+body {
+  margin: 0;
+}
+
+/* * {
+  outline: 1px solid sandybrown;
+} */

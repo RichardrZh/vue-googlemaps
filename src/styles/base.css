@@ -1,0 +1,7 @@
+/* Base Styles */
+/* lib: tailwind */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
