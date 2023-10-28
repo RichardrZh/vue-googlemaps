@@ -16,10 +16,16 @@ export const useLocationsStore = defineStore("locations", () => {
      * @property {String} placeID
      * @property {String} address
      * @property {Position} position
+     * @property {TimeData} timeData
      * 
      * @typedef {Object} Position
      * @property {Number} lat
      * @property {Number} lng
+     * 
+     * @typedef {Object} TimeData
+     * @property {Number} timeZoneID
+     * @property {Number} timeZoneName
+     * @property {Number} localTimestamp
      */
     const locations = reactive(new Map())
 
