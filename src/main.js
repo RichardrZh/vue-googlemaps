@@ -1,4 +1,7 @@
 import './styles/main.css'
+import "bootstrap/dist/css/bootstrap.min.css"
+import "bootstrap"
+
 import { GOOGLE_MAPS_API_KEY } from './config.json'
 
 import { createApp } from 'vue'
