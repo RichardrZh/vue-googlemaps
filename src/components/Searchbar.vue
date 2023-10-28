@@ -30,22 +30,24 @@ function setPlace(place) {
 }
 
 /* helper */
-function getInputText() {
+/* function getInputText() {
     return document.getElementById('searchbox-input').value.trim()
-}
+} */
 
-function handleInputSubmit() {
-    let text = getInputText()
-
-
-    /* we want to: 
+/* 
+we want to: 
         get the current location? from autocomplete api, 
 
         add it to store, 
         fill the input field with the location's actual address
         navigate to the location on the map (update center?)
-    */
-}
+*/
+/* function handleInputSubmit() {
+    let text = getInputText()
+
+
+    
+} */
 
 
 
@@ -65,18 +67,17 @@ function handleGetCurrentLocation() {
 
 <template>
 
-    <form action="" class="relative inline-block"> 
+    <form class="tw-relative tw-inline-block"> 
         <!-- <input id="searchbox-input" type="search" placeholder="Search Locations" aria-description="search results will appear below"> -->
         <!-- setplace is called on dropdown click or enter keypress -->
         <GMapAutocomplete
             id="searchbox-input"
             placeholder="Search Locations"
-            @place_changed="setPlace"
-            @keyup.enter.native="handleInputSubmit">
+            @place_changed="setPlace">
         </GMapAutocomplete>
 
         <!-- add search button/curr loc button here -->
-        <button @click.prevent="handleInputSubmit">search</button>
+        <button @click.prevent="setPlace">search</button>
         <button @click.prevent="handleGetCurrentLocation">current location</button>
 
     </form>
