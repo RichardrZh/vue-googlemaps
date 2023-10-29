@@ -27,8 +27,7 @@ section {
 }
 
 .searchbar-wrapper {
-  top: 16px;
-  left: 50%;
-  transform: translate(-50%);
+  top: 10px;
+  left: 10px;
 }
 </style>

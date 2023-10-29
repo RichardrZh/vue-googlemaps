@@ -1,6 +1,7 @@
 <script setup>
 import { computed } from 'vue'
 import { useLocationsStore } from "../stores/locations.js"
+
 const store = useLocationsStore()
 
 let center = computed(() => {
@@ -13,14 +14,18 @@ let center = computed(() => {
   }
 })
 
+
+
 </script>
 
 <template>
   <GMapMap 
+    ref="googleMapsRef"
     class="google-map"
     :center="center"
     :zoom="5"
-    map-type-id="terrain">
+    map-type-id="terrain"
+    :options="{ mapTypeControl: false }">
 
     <GMapMarker
       :key="placeID"
