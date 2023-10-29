@@ -21,12 +21,8 @@ function setPlace(place) {
         }
     }
 
-    /* console.log(place) */
-    console.log(data)
-
     store.addLocation(data.placeID, data.address, data.position.lat, data.position.lng)
-    
-    console.log(store.getMostRecentLocation())
+
 }
 
 /* helper */
@@ -77,8 +73,12 @@ function handleGetCurrentLocation() {
         </GMapAutocomplete>
 
         <!-- add search button/curr loc button here -->
-        <button @click.prevent="setPlace">search</button>
-        <button @click.prevent="handleGetCurrentLocation">current location</button>
+        <button class="search-button" @click.prevent="setPlace" title="Search Locations">
+            <font-awesome-icon :icon="['fas', 'search']" />
+        </button>
+        <button class="location-button" @click.prevent="handleGetCurrentLocation" title="Get Current Location">
+            <font-awesome-icon :icon="['fas', 'map-location-dot']" style="color: #fd0006"/>
+        </button>
 
     </form>
 
@@ -86,8 +86,27 @@ function handleGetCurrentLocation() {
 
 
 <style scoped>
-form {
-  margin-left: 32px;
+.search-button, .location-button {
+    position: absolute;
+    bottom: auto;
+    left: auto;
+    border: 0;
+    padding: 0;
+    background-color: white;
+    border-radius: 50%;
+}
+.search-button {
+    top: 3px;
+    right: 6px;
+    width: 1.5em;
+    height: 1.5em;
+}
+.location-button {
+    top: 0;
+    right: 0;
+    width: 2em;
+    height: 2em;
+    transform: translatex(3em);
 }
 
 #searchbox-input {
