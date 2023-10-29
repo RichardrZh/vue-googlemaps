@@ -22,11 +22,10 @@ const latestLocation = computed(() => {
   let address = store.getMostRecentLocation().address
   let timeZone = `${store.getMostRecentLocation().timeData.timeZoneID}, ${store.getMostRecentLocation().timeData.timeZoneName}`
   
-  let options = {
-    weekday: "long",
-    year: "numeric",
-    month: "long",
-    day: "numeric",
+  const options = {
+    dayperiod: "short",
+    hour: "numeric",
+    minute: "numeric",
   }
   let localTime = getDateString(store.getMostRecentLocation().timeData.localTimestamp, options)
 
@@ -41,16 +40,29 @@ const latestLocation = computed(() => {
 </script>
 
 <template>
-    <div class="tw-flex tw-flex-col tw-gap-5">
-        <div class="container-rounded tw-bg-red-200">
-            <h2>Latest Searched Location:</h2>
-            <p>{{ latestLocation.address }} - {{ latestLocation.timeZone }} - {{ latestLocation.localTime }}</p>
-        </div>
 
-        <div class="container-rounded tw-bg-red-200">
-            <Pagination />
-        </div>
-    </div>
+  <div class="container-rounded tw-bg-red-200">
+    <h2>Latest Searched Location:</h2>
+    
+    <table class="table">
+      <tbody>
+        <tr>
+          <th scope="row">Address:</th>
+          <td>{{ latestLocation.address }}</td>
+        </tr>
+        <tr>
+          <th scope="row">Time&nbsp;Zone:</th>
+          <td>{{ latestLocation.timeZone }}</td>
+        </tr>
+        <tr>
+          <th scope="row">Local&nbsp;Time:</th>
+          <td>{{ latestLocation.localTime }}</td>
+        </tr>
+      </tbody>
+    </table>
+    <Pagination />
+  </div>
+
 </template>
 
 <style scoped>
@@ -58,6 +70,18 @@ const latestLocation = computed(() => {
   box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
   border-radius: 1rem;
   padding: 16px;
+}
+
+h2 {
   text-align: center;
+  background-color: white;
+  margin-bottom: 0;
+  font-weight: bold;
+  font-size: larger;
+}
+
+table th {
+  font-size: medium;
+  font-weight: 600;
 }
 </style>
