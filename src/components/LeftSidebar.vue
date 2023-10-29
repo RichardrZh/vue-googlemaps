@@ -26,7 +26,6 @@ const theme = reactive({
 })
 
 function handleResize() {
-    console.log(sidebarRef.value)
   theme.marginLeft = `-${sidebarRef.value.clientWidth - 32}px`
 }
 
@@ -105,6 +104,8 @@ section {
     min-width: 30vw;
     width: 30rem;
     padding: 16px;
+    max-height: 100vh;
+    overflow: auto;
 }
 
 </style>
