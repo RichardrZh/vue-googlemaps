@@ -1,14 +1,15 @@
 <script setup>
 import { ref, reactive, computed } from 'vue'
 import { useLocationsStore } from '../stores/locations.js'
-import { getCurrentLocation } from '../scripts/GoogleMapsUtils.js'
+import { getCurrentLocation, getReverseGeocodeAddress, handleError } from '../scripts/GoogleMapsUtils.js'
 const store = useLocationsStore()
 
 function setPlace(place) {
     if (!place.geometry || !place.formatted_address || !place.place_id) {
         /* invalid (or not a specific) place (ie. not a place object) */
-        /* place.name */
+        /* place.name */ 
         /* use autocomplete api to get 1st result */
+        handleInputSubmit()
         return
     }
     
@@ -38,32 +39,77 @@ we want to:
         fill the input field with the location's actual address
         navigate to the location on the map (update center?)
 */
-/* function handleInputSubmit() {
-    let text = getInputText()
+function handleInputSubmit() {
+    /* workaround */
+    /* we manually get the 1st autocomplete dropdown text and call geolocation api */
 
+    /* get 1st place name from autocomplete dropdown */
+    let pacContainer = document.querySelectorAll(".pac-container .pac-item")[0]
 
+    let itemQuery = pacContainer?.children[1]
+    let itemRest = pacContainer?.children[2]
+    let text = `${itemQuery?.textContent} ${itemRest?.textContent}`.replace(' ', '%20')
+    getReverseGeocodeAddress(text).then(
+        (result) => { 
+            if (!Array.isArray(result.data.results) || result.data.results.length < 1) {
+                handleError("No valid search results found.")
+                return
+            }
+            store.addLocation(
+                result.data.results[0].place_id, 
+                result.data.results[0].formatted_address, 
+                result.data.results[0].geometry.location.lat, 
+                result.data.results[0].geometry.location.lng
+            )
+        },
+        (error) => { 
+            handleError(error)
+        }
+    )
     
-} */
+    
+    /* this below does not work due to places api being server side, there is a coors issue */
+    /* 
+    let inputText = getInputText()
+    getFirstAutoComplete(inputText).then(
+        (result) => { 
+            store.addLocation(
+                result.placeID, 
+                result.address, 
+                result.latitude, 
+                result.longitude
+            )
+        },
+        (error) => { 
+            handleError(error)
+        }
+    ) */
+}
 
 
 
 function handleGetCurrentLocation() {
-    /* getCurrentLocation() */
-
-
-    /* we want to: 
-        get the current location, 
-        add it to store, 
-        fill the input field with the location's address
-        navigate to the location on the map (update center?)
-    */
+    getCurrentLocation().then(
+        (result) => { 
+            store.addLocation(
+                result.placeID, 
+                result.address, 
+                result.latitude, 
+                result.longitude
+            )
+        },
+        (error) => { 
+            handleError(error)
+        }
+    )
 }
 
 </script>
 
 <template>
 
-    <form class="tw-relative tw-inline-block"> 
+    <!-- We do not use form to prevent form submit event firing causing duplicate api requests -->
+    <div class="tw-relative tw-inline-block"> 
         <!-- <input id="searchbox-input" type="search" placeholder="Search Locations" aria-description="search results will appear below"> -->
         <!-- setplace is called on dropdown click or enter keypress -->
         <GMapAutocomplete
@@ -71,16 +117,18 @@ function handleGetCurrentLocation() {
             placeholder="Search Locations"
             @place_changed="setPlace">
         </GMapAutocomplete>
-
         <!-- add search button/curr loc button here -->
         <button class="search-button" @click.prevent="setPlace" title="Search Locations">
             <font-awesome-icon :icon="['fas', 'search']" />
         </button>
+        
         <button class="location-button" @click.prevent="handleGetCurrentLocation" title="Get Current Location">
             <font-awesome-icon :icon="['fas', 'map-location-dot']" style="color: #fd0006"/>
         </button>
 
-    </form>
+    </div>
+
+        
 
 </template>
 
@@ -114,7 +162,7 @@ function handleGetCurrentLocation() {
   border-radius: 1rem;
   text-indent: 1rem;
   width: 20em;
-  /* todo: make responsove by adding min/max width */
+  max-width: 50vw;
 }
 
 button {
