@@ -28,6 +28,6 @@ section {
 
 .searchbar-wrapper {
   top: 10px;
-  left: 10px;
+  left: 32px;
 }
 </style>
