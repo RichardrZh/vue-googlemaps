@@ -1,10 +1,18 @@
 <script setup>
 import { computed } from 'vue'
+
 import { useLocationsStore } from "../stores/locations.js"
+
 
 const store = useLocationsStore()
 
-let center = computed(() => {
+/**
+ * The center of the google map.
+ * @type {Computed<Object>}
+ * @property {Number} lat - The latitude of the center.
+ * @property {Number} lng - The longitude of the center.
+ */
+const center = computed(() => {
   if (store.getMostRecentLocation()) {
     return store.getMostRecentLocation().position
   }
@@ -13,10 +21,8 @@ let center = computed(() => {
     lng: -79.355269
   }
 })
-
-
-
 </script>
+
 
 <template>
   <GMapMap 
@@ -32,8 +38,6 @@ let center = computed(() => {
       v-for="[placeID, locationData] in store.getLocations()"
       :position="locationData.position"
       @click="center = locationData"/>
-
-      <!-- <GMapMarker :key="index" v-for="(m, index) in markers" :position="m.position"  /> -->
 
   </GMapMap>
 </template>
