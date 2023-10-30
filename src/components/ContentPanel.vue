@@ -2,7 +2,7 @@
 import Pagination from './Pagination.vue'
 import { computed } from 'vue'
 import { useLocationsStore } from '../stores/locations.js'
-import { getDateString } from '../scripts/DateTimeUtils.js'
+import { getFormattedTime} from '../scripts/DateTimeUtils.js'
 
 const store = useLocationsStore()
 
@@ -18,16 +18,11 @@ const latestLocation = computed(() => {
       localTime: ""
     }
   }
-
+  
   let address = store.getMostRecentLocation().address
   let timeZone = `${store.getMostRecentLocation().timeData.timeZoneID}, ${store.getMostRecentLocation().timeData.timeZoneName}`
   
-  const options = {
-    dayperiod: "short",
-    hour: "numeric",
-    minute: "numeric",
-  }
-  let localTime = getDateString(store.getMostRecentLocation().timeData.localTimestamp, options)
+  let localTime = getFormattedTime(store.getMostRecentLocation().timeData.localTimestamp)
 
   return {
     address: address,
@@ -41,25 +36,27 @@ const latestLocation = computed(() => {
 
 <template>
 
-  <div class="container-rounded tw-bg-red-200">
+  <div class="container-rounded tw-bg-[#d1eaff]">
     <h2>Latest Searched Location:</h2>
+    <div class="tw-overflow-auto">
+      <table class="table">
+        <tbody>
+          <tr>
+            <th scope="row">Address:</th>
+            <td>{{ latestLocation.address }}</td>
+          </tr>
+          <tr>
+            <th scope="row">Time&nbsp;Zone:</th>
+            <td>{{ latestLocation.timeZone }}</td>
+          </tr>
+          <tr>
+            <th scope="row">Local&nbsp;Time:</th>
+            <td>{{ latestLocation.localTime }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
     
-    <table class="table">
-      <tbody>
-        <tr>
-          <th scope="row">Address:</th>
-          <td>{{ latestLocation.address }}</td>
-        </tr>
-        <tr>
-          <th scope="row">Time&nbsp;Zone:</th>
-          <td>{{ latestLocation.timeZone }}</td>
-        </tr>
-        <tr>
-          <th scope="row">Local&nbsp;Time:</th>
-          <td>{{ latestLocation.localTime }}</td>
-        </tr>
-      </tbody>
-    </table>
     <Pagination />
   </div>
 
