@@ -1,15 +1,18 @@
 <script setup>
+import ContentPanel from './components/ContentPanel.vue';
 import LeftSidebar from './components/LeftSidebar.vue'
 import MapPanel from './components/MapPanel.vue'
 </script>
 
 <template>
 
-  <main class="flex items-stretch w-screen max-w-full overflow-x-hidden">
+  <main class="tw-flex tw-items-stretch tw-w-screen tw-max-w-full tw-overflow-x-hidden">
     
-    <LeftSidebar />
+    <LeftSidebar class="tw-z-50">
+      <ContentPanel />
+    </LeftSidebar>
 
-    <MapPanel /> 
+    <MapPanel class="tw-z-10" /> 
 
   </main>
 
