@@ -1,4 +1,6 @@
 import './styles/main.css'
+
+/* lib: bootstrap */
 import "bootstrap/dist/css/bootstrap.min.css"
 import "bootstrap"
 
@@ -16,7 +18,7 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 /* import specific icons */
 import { faMapLocationDot, faSearch, faTrash } from '@fortawesome/free-solid-svg-icons'
 
-/* vue google maps */
+/* vue 3 google maps */
 import VueGoogleMaps from 'vue-google-maps-community-fork'
 
 const app = createApp(App)
