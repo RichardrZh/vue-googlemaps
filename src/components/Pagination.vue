@@ -96,7 +96,7 @@ function isPaginationIconActive(pageNumber) {
 
     <div class="table-wrapper">
         <div class="tw-relative tableheader-wrapper">
-            <h2>Latest Searched Location:</h2>
+            <h2>Searched Locations:</h2>
             <button @click="deleteSelectedLocations" type="button" title="Delete Selected Locations">
                 <font-awesome-icon :icon="['fas', 'trash']" style="color: #fd0006;" />
             </button>
