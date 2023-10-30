@@ -1,6 +1,8 @@
 # Vue Google Maps Application
 
-A google maps vue application for the accuenergy pre-interview code submission. It has a map, searchbar, and panel to see searched and most recently searched locations.
+A google maps vue application for the accuenergy pre-interview code submission. 
+
+It has a map, searchbar, and panel to see searched and most recently searched locations.
 
 ## Description
 
@@ -50,9 +52,8 @@ command to run if program contains helper info
 ## Authors
 
 Richard Zhuang
-
-Email: richard.zhuang91@gmail.com
-LinkedIn: [https://www.linkedin.com/in/richardzhuang91/](https://www.linkedin.com/in/richardzhuang91/)
+* Email: richard.zhuang91@gmail.com
+* LinkedIn: [https://www.linkedin.com/in/richardzhuang91/](https://www.linkedin.com/in/richardzhuang91/)
 
 <!-- ## Version History
 

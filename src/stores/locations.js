@@ -41,11 +41,9 @@ export const useLocationsStore = defineStore('locations', () => {
      */
     const debug = false
     if (debug) {
-        let data = []
-
-        /* adds key/value pairs to the list */
-        for (let i = 0; i < 101; i++) {
-            data[i] = [`test_placeID_${i}`, {
+        for (let i = 0; i < 81; i++) {
+            let placeID = `test_placeID_${i}`
+            let locationsData = {
                 placeID: `test_placeID_${i}`,
                 address: `test_address_${i}`,
                 position: {
@@ -57,10 +55,10 @@ export const useLocationsStore = defineStore('locations', () => {
                     timeZoneName: `test_timeZoneName_${i}`,
                     localTimestamp: i * 1000,
                 }
-            }]
-        }
+            }
 
-        locations = new Map(data)
+            locations.set(placeID, locationsData)
+        }
     }
     
     /**
