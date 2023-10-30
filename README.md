@@ -18,6 +18,8 @@ It features:
 * A panel to display the time zone and local time of the latest searched location.
 * A triangle button to toggle sidebar opening and closing.
 
+![Application Example Image](https://github.com/RichardrZh/vue-googlemaps/blob/main/application_example.png?raw=true)
+
 ## Getting Started
 
 ### Dependencies
