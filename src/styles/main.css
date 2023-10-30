@@ -1,5 +1,6 @@
 @import './base.css';
 
+
 /* Global CSS Vars */
 
 #app {
@@ -9,7 +10,3 @@
 body {
   margin: 0;
 }
-
-/* * {
-  outline: 1px solid sandybrown;
-} */

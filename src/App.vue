@@ -4,6 +4,7 @@ import LeftSidebar from './components/LeftSidebar.vue'
 import MapPanel from './components/MapPanel.vue'
 </script>
 
+
 <template>
 
   <main class="tw-flex tw-items-stretch tw-w-screen tw-max-w-full tw-overflow-x-hidden">
@@ -18,7 +19,7 @@ import MapPanel from './components/MapPanel.vue'
 
 </template>
 
-<style scoped>
 
+<style scoped>
 
 </style>

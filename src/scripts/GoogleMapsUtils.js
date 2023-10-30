@@ -1,9 +1,34 @@
-import axios from "axios";
-import { GOOGLE_MAPS_API_KEY } from "../config.json"
+import {
+    getTimeZone,
+    getAutoComplete, 
+    getPlaceDetails,
+    getReverseGeocodeLatLng, 
+} from './GoogleMapsApi.js'
 
+/** 
+ * @typedef {Object} GeoLocationData 
+ * @property {String} placeID - The place id of a location (as specified by the google maps database). 
+ * @property {String} address - The address of a location.
+ * @property {Number} latitude - The latitude of a location.
+ * @property {Number} longitude - The longitude of a location.
+*/
+
+/** 
+ * @typedef {Object} TimeData
+ * @property {String} timeZoneID - The ID of the time zone (as specified by the CLDR project). 
+ * @property {String} timeZoneName - The long form name of the time zone.
+ * @property {Number} localTimestamp - The local time in seconds since midnight, January 1, 1970.
+*/
+
+/**
+ * Gets the currrent location of the user.
+ * @async
+ * @throws Will throw an error if the user browser does not support geolocation.
+ * @returns {GeoLocationData} Returns an object containing geolocation data.
+ */
 async function getCurrentLocation() {
+    /* if browser does not have geolocation support, throw error */
     if (!navigator || !navigator.geolocation) {
-        /* no geolocation support (browser), handle error */
         throw new Error('Cannot get location from browser, no geolocation support detected.')
     }
         
@@ -13,7 +38,9 @@ async function getCurrentLocation() {
 
     const latitude = position.coords.latitude
     const longitude = position.coords.longitude
+
     const result = await getReverseGeocodeLatLng(latitude, longitude)
+
     return {
         placeID: result.data.results[0].place_id,
         address: result.data.results[0].formatted_address,
@@ -22,32 +49,24 @@ async function getCurrentLocation() {
     }
 }
 
-async function getReverseGeocodeLatLng(latitude, longitude) {
-    let url = 'https://maps.googleapis.com/maps/api/geocode/json'
-    let params = {
-        latlng: `${latitude},${longitude}`,
-        key: GOOGLE_MAPS_API_KEY
-    }
-    return getGoogleAPIResponse(url, params)
-}
-
-async function getReverseGeocodeAddress(address) {
-    let url = 'https://maps.googleapis.com/maps/api/geocode/json'
-    let params = {
-        address: address,
-        key: GOOGLE_MAPS_API_KEY
-    }
-    return getGoogleAPIResponse(url, params)
-}
-
+/**
+ * Gets geolocation place api data from the first google place autocomplete api result.
+ * @async
+ * @throws Will throw an error if the input query has no matching autocomplete results.
+ * @param {String} input - An input query string.
+ * @returns {GeoLocationData} Returns an object containing geolocation data.
+ */
 async function getFirstAutoComplete(input) {
     let response = await getAutoComplete(input)
     let predictions = response.data.predictions
+
+    /* if predictions array is empty/null/undefined, throw error */
     if (!Array.isArray(predictions) || predictions.length < 1) {
-        /* throw error, no autocomplete results */
         throw new Error('Cannot find any matching locations.')
     }
+
     let placeDetails = await getPlaceDetails(predictions[0].place_id)
+
     return {
         placeID: placeDetails.data.result.placeID,
         address: placeDetails.data.result.formatted_address,
@@ -56,27 +75,18 @@ async function getFirstAutoComplete(input) {
     }
 }
 
-async function getAutoComplete(input) {
-    let url = 'https://maps.googleapis.com/maps/api/place/autocomplete/json'
-    let params = {
-        input: input,
-        key: GOOGLE_MAPS_API_KEY
-    }
-    return await getGoogleAPIResponse(url, params)
-}
-
-async function getPlaceDetails(placeID) {
-    let url = 'https://maps.googleapis.com/maps/api/place/details/json'
-    let params = {
-        place_id: placeID,
-        key: GOOGLE_MAPS_API_KEY
-    }
-    return await getGoogleAPIResponse(url, params)
-}
-
+/**
+ * Gets datetime data from the timezone google maps API.
+ * @async
+ * @param {Number} latitude - The latitude of a location.
+ * @param {Number} longitude - The longitude of a location.
+ * @returns {TimeData} Returns an object containing time data.
+ */
 async function getDateTime(latitude, longitude) {
     let timestamp = Date.now() / 1000
+
     let timeZoneData = await getTimeZone(latitude, longitude, timestamp)
+
     return {
         timeZoneID: timeZoneData.data.timeZoneId,
         timeZoneName: timeZoneData.data.timeZoneName,
@@ -84,49 +94,8 @@ async function getDateTime(latitude, longitude) {
     }
 }
 
-async function getTimeZone(latitude, longitude, timestamp) {
-    let url = 'https://maps.googleapis.com/maps/api/timezone/json'
-    let params = {
-        location: `${latitude},${longitude}`,
-        timestamp: timestamp,
-        key: GOOGLE_MAPS_API_KEY
-    }
-    
-    return await getGoogleAPIResponse(url, params)
-}
-           
-      
-async function getGoogleAPIResponse(url, params, timeout=3000) {
-    return await axios.get(url, { timeout: timeout, params: params })
-}
-
-function handleError(error) {
-    if (error.response) {
-        // The request was made and the server responded with a status code
-        // that falls out of the range of 2xx
-        console.log(error.response.data);
-        console.log(error.response.status);
-        console.log(error.response.headers);
-    } else if (error.request) {
-        // The request was made but no response was received
-        // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
-        // http.ClientRequest in node.js
-        console.log(error.request);
-    } else {
-        // Something happened in setting up the request that triggered an Error
-        console.log(error);
-    }
-}
-
 export { 
     getCurrentLocation, 
-    getReverseGeocodeLatLng, 
-    getReverseGeocodeAddress,
     getFirstAutoComplete, 
-    getAutoComplete, 
-    getPlaceDetails,
     getDateTime,
-    getTimeZone,
-    getGoogleAPIResponse,
-    handleError
 }
