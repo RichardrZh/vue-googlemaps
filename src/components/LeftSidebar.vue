@@ -58,10 +58,10 @@ onUnmounted(() => {
 <style scoped>
 
 section {
-  background-color: lightgrey;
+  background-color: #66ccc3;
   border-style: solid;
   border-width: 0 8px 0 0;
-  border-right-color: whitesmoke;
+  border-right-color: #f5c73d;
   min-width: 16px;
   transition: margin 1s;
   box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25);
@@ -87,7 +87,7 @@ section {
 .arrow-right {
   border-top: 32px solid transparent;
   border-bottom: 32px solid transparent;
-  border-left: 32px solid lightgrey;
+  border-left: 32px solid #66ccc3;
   border-right: none;
   transform: translateX(40px);
 }
@@ -95,7 +95,7 @@ section {
   border-top: 40px solid transparent;
   border-bottom: 40px solid transparent; 
   border-left: none;
-  border-right: 40px solid whitesmoke; 
+  border-right: 40px solid #f5c73d; 
   transform: translate(8px, -8px);
 }
 
