@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import { computed, reactive } from "vue";
-import { getDateTime } from "../scripts/GoogleMapsUtils";
+import { getDateTime, handleError } from "../scripts/GoogleMapsUtils";
 
 export const useLocationsStore = defineStore("locations", () => {
 
@@ -23,28 +23,45 @@ export const useLocationsStore = defineStore("locations", () => {
      * @property {Number} lng
      * 
      * @typedef {Object} TimeData
-     * @property {Number} timeZoneID
-     * @property {Number} timeZoneName
+     * @property {String} timeZoneID
+     * @property {String} timeZoneName
      * @property {Number} localTimestamp
      */
     const locations = reactive(new Map())
 
+    /* for testing purposes, manually adds 101 entries to locations map. to use: replace locations assignment above
+    let data = []
+    for (let i = 0; i < 101; i++) {
+        data[i] = [`test_placeID_${i}`, {
+            placeID: `test_placeID_${i}`,
+            address: `test_address_${i}`,
+            position: {
+                lat: 0,
+                lng: 0
+            },
+            timeData: {
+                timeZoneID: `test_timeZoneID_${i}`,
+                timeZoneName: `test_timeZoneName_${i}`,
+                localTimestamp: 0,
+            }
+        }]
+    }
+    let testingMap = new Map(data)
+    const locations = reactive(testingMap) */
+
     const mostRecentLocation = computed(() => {
-        let placeID = locations.keys().next().value
-        if (typeof placeID === 'undefined' && locations.keys().next().done) {
+        let array = Array.from(locations.values())
+        if (array.length < 1) {
             /* no locations in map */
             return null
         }
 
-        let data = locations.get(placeID)
-        return data
+        return array[array.length - 1]
     })
 
     function addLocation(placeID, address, latitude, longitude) {
-        getDateTime(
-            latitude, 
-            longitude, 
-            ({ timeZoneID, timeZoneName, localTimestamp }) => {
+        getDateTime(latitude, longitude).then(
+            (result) => { 
                 const locationsData = {
                     placeID: placeID,
                     address: address,
@@ -53,14 +70,17 @@ export const useLocationsStore = defineStore("locations", () => {
                         lng: longitude
                     },
                     timeData: {
-                        timeZoneID: timeZoneID,
-                        timeZoneName: timeZoneName,
-                        localTimestamp: localTimestamp,
+                        timeZoneID: result.timeZoneID,
+                        timeZoneName: result.timeZoneName,
+                        localTimestamp: result.localTimestamp,
                     }
                 }
                 locations.set(placeID, locationsData)
+            },
+            (error) => { 
+                handleError(error)
             }
-        )
+        ) 
     }
 
     function removeLocation(placeID) {
