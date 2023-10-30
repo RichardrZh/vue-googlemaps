@@ -1,11 +1,36 @@
 <script setup>
-import { ref, reactive, computed } from 'vue'
+import { ref, reactive, computed, watch, getCurrentInstance } from 'vue'
 import { useLocationsStore } from '../stores/locations.js'
-import { getDateString } from '../scripts/DateTimeUtils'
+import { getFormattedTime} from '../scripts/DateTimeUtils.js'
 
 const store = useLocationsStore()
 
 const deletePageChecked = ref(false)
+
+watch(deletePageChecked, (value, previousValue) => {
+    let startingIndex = (page.value - 1) * locationsPerPage.value
+    let endingIndex = Math.min(startingIndex + locationsPerPage.value, pageLocations.value.length)
+    if (value) {
+        /* check all locations on page ie. add them to selected locations */
+        for(let i = startingIndex; i < endingIndex; i++) {
+            let placeID = pageLocations.value[startingIndex + i].placeID
+            if (!selectedLocations.value.includes(placeID)) {
+                selectedLocations.value.push(placeID)
+            }
+        }
+    } else if (previousValue) {
+        /* uncheck all locations on page */
+        for(let i = startingIndex; i < endingIndex; i++) {
+            let placeID = pageLocations.value[startingIndex + i].placeID
+
+            let index = selectedLocations.value.indexOf(placeID)
+            if (index > -1) {
+                /* remove elem */
+                selectedLocations.value.splice(index, 1)
+            }
+        }
+    }
+})
 
 const locationsPerPage = ref(10)
 
@@ -15,13 +40,18 @@ const page = ref(1)
 const selectedLocations = ref([])
 
 const pageLocations = computed(() => {
-    
-    let next = typeof store.getLocations().values().next()
-    if (next.value === 'undefined' && next.done) {
+    let array = Array.from(store.getLocations().values())
+    if (array.length < 1) {
         return []
     }
 
-    return Array.from(store.getLocations().values()).toReversed()
+    let reversedArray = array.toReversed()
+    let mostRecentLocation = reversedArray[0]
+    if (deletePageChecked.value) {
+        selectedLocations.value.push(mostRecentLocation.placeID)
+    }
+
+    return reversedArray
 })
 
 function isTableRowActive(index) {
@@ -30,30 +60,24 @@ function isTableRowActive(index) {
 }
 
 function getDate(localTimestamp) {
-    return getDateString(localTimestamp, {
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-    })
+    return new Date(localTimestamp).toDateString()
 }
 
 function getTime(localTimestamp) { 
-    return getDateString(localTimestamp, {
-        dayperiod: "short",
-        hour: "numeric",
-        minute: "numeric",
-        timeZoneName: "short"
-    })
+    return getFormattedTime(localTimestamp)
 }
 
-function selectAll() {
-
-}
 
 function deleteSelectedLocations() {
+    /* remove from location store */
     selectedLocations.value.forEach(placeID => {
         store.removeLocation(placeID)
     })
+    /* remove from locations selected list */
+    selectedLocations.value = []
+
+    /* uncheck select all delete button */
+    deletePageChecked.value = false
 }
 
 function isPaginationIconActive(pageNumber) {
@@ -112,7 +136,7 @@ function isPaginationIconActive(pageNumber) {
     <nav class="" aria-label="...">
         <ul class="pagination justify-content-center">
             <li class="page-item">
-                <button type="button" class="page-link" @click="page = 1">
+                <button title="First Page" type="button" class="page-link" @click="page = 1">
                     &lt;&lt; <!--  << -->
                 </button> 
             </li>
@@ -158,7 +182,7 @@ function isPaginationIconActive(pageNumber) {
                 </button>
             </li>
             <li class="page-item">
-                <button class="page-link" @click="page = Math.round(pageLocations.length / locationsPerPage + 0.49)">
+                <button title="Last Page" class="page-link" @click="page = Math.round(pageLocations.length / locationsPerPage + 0.49)">
                     &gt;&gt; <!-- >> -->
                 </button> 
             </li>
@@ -181,12 +205,13 @@ function isPaginationIconActive(pageNumber) {
 .tableheader-wrapper button {
   position: absolute;
   top: 0;
-  right: 0;
+  left: 0;
   display: block;
   height: 40px;
   width: 40px;
   border: 0;
   padding: 0;
+  transform: translateX(-5px);
   background-color: transparent;
 }
 
