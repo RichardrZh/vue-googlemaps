@@ -1,12 +1,17 @@
 # Vue Google Maps Application
 
-A google maps vue application for the accuenergy pre-interview code submission. 
+A Google Maps Vue application showing how to integrate Google Maps API with modern UI frameworks. 
 
-It has a map, searchbar, and panel to see searched and most recently searched locations.
+This application uses Vue 3, Axios, TailwindCSS, Bootstrap, Pinia, JavaScript, and integrated with Google Maps API. It features a google map and a searchable input field to allow seaching for any location. Searched places and addresses will be marked in the google map, and the application also displays a list of searched addresses with pagenation support. 
+
+The application demonstrates how to use Vue 3 for a single page application, using compsition api, and single-file components. It shows how to implement reactivity through event & property binding, watchers, lifecycle hooks, and conditional rendering. It also shows how to call the Google Maps API and how to integrate a google map into an application. 
+
+This application is responsive and can adapt to different devices with different screen sizes, ranging from a desktop computer to a mobile phone. 
 
 ## Description
 
 This application was built with a responsive mobile first methodology. 
+
 It features: 
 * A button that allows the user to get their current location from the browser.
 * A searchbar with autocomplete that is triggered by dropdown click, search button click, and enter keypress.
@@ -44,29 +49,6 @@ It features:
 code blocks for commands
 ``` -->
 
-## Help
-
-Feel free to contact me at richard.zhuang91@gmail.com for any issues or questions.
-<!-- ```
-command to run if program contains helper info
-``` -->
-
-## Authors
-
-Richard Zhuang
-* Email: richard.zhuang91@gmail.com
-* LinkedIn: [https://www.linkedin.com/in/richardzhuang91/](https://www.linkedin.com/in/richardzhuang91/)
-
-<!-- ## Version History
-
-* 0.2
-    * Various bug fixes and optimizations
-    * See [commit change]() or See [release history]()
-* 0.1
-    * Initial Release -->
-
 ## License
 
-This project is licensed under the GNU General Public License v3.0 - see the LICENSE.md file for details
-
-<!-- ## Acknowledgments -->
+This project is licensed under the GNU General Public License v3.0 - see the [LICENSE file](LICENSE) for details.
