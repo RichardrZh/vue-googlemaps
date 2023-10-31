@@ -47,7 +47,7 @@ The more comprehensive solution is to install and use the javascript Google Maps
 * Bootstrap
 * Font Awesome
 
-### Installing
+### Installation
 
 To install and run the project locally first make sure you have node installed. Then download the application and run the following commands.
 
